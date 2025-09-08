@@ -2,17 +2,13 @@ import logging
 from datetime import datetime
 
 # Configurando o logger
-logger = logging.getLogger("MeuLogger")
-logger.setLevel(logging.DEBUG)
-
-# Formato
-formatter = logging.Formatter(
-    "%(asctime)s %(levelname)s : %(message)s", datefmt="%d-%m-%Y %H:%M:%S"
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s %(levelname)s : %(message)s",
+    datefmt="%d-%m-%Y %H:%M:%S",
 )
 
-console_handler = logging.StreamHandler()
-console_handler.setFormatter(formatter)
-logger.addHandler(console_handler)
+logger = logging.getLogger("MeuLogger")
 
 # Contador
 ERROS_ENCONTRADOS = 0
