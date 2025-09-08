@@ -57,3 +57,5 @@ if __name__ == "__main__":
     if results:
         # Salva os dados em CSV e configura a saída
         salvar_csv(results, "outputs/api_output.csv")
+    else:
+        LOGGER("ERRO", "Nenhuma cotação foi encontrada.")
