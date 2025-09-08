@@ -4,12 +4,17 @@ from utils import current_timestamp, salvar_csv
 
 
 def fetch_data_api():
+    # URL da API, passando as moedas para cotação
     url = "https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL,BTC-BRL,CNY-BRL,JPY-BRL"
 
     try:
         response = requests.get(url, timeout=10)
+        # Estoura uma exceção para erros HTTP / 4xx e 5xx
         response.raise_for_status()
+
+        # Transforma a response em um JSON
         data = response.json()
+
         resultado = [
             {
                 "moeda": "DOLAR AMERICANO/REAL",
@@ -41,6 +46,7 @@ def fetch_data_api():
         LOGGER("INFO", "Dados da API obtidos com sucesso.")
         return resultado
 
+    # Estoura uma exceção para erros de conexão
     except requests.exceptions.RequestException as e:
         LOGGER("ERRO", f"Erro ao acessar a API: {e}")
         return []
@@ -49,4 +55,5 @@ def fetch_data_api():
 if __name__ == "__main__":
     results = fetch_data_api()
     if results:
+        # Salva os dados em CSV e configura a saída
         salvar_csv(results, "outputs/api_output.csv")
