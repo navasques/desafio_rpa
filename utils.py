@@ -1,15 +1,17 @@
-from logger import LOGGER
+from logger import setup_logger
 from datetime import datetime
 import pandas as pd
+
+logger = setup_logger("utils")
 
 
 def salvar_csv(data, filename):
     try:
         df = pd.DataFrame(data)
         df.to_csv(filename, index=False, encoding="utf-8")
-        LOGGER("INFO", f"Dados salvos em {filename}")
+        logger.info(f"Dados salvos em {filename}")
     except Exception as e:
-        LOGGER("ERRO", f"Erro ao salvar CSV: {e}")
+        logger.error(f"Erro ao salvar CSV: {e}")
 
 
 def current_timestamp():
