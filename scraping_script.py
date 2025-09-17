@@ -51,7 +51,6 @@ def fetch_currency_from_web():
                     )
                     # Obtém o valor da cotação usando get_attribute do Selenium
                     cotacao_valor = price_tag.get_attribute("value")
-                    logger.info(f"{cotacao_nome}: {cotacao_valor}")
 
                 # Estoura uma exceção se o elemento não for encontrado
                 except TimeoutException:
