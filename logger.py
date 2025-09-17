@@ -1,27 +1,19 @@
 import logging
+import sys
 from datetime import datetime
 
-# Configurando o logger
-logging.basicConfig(
-    level=logging.DEBUG,
-    format="%(asctime)s %(levelname)s : %(message)s",
-    datefmt="%d-%m-%Y %H:%M:%S",
-)
 
-logger = logging.getLogger("MeuLogger")
+def setup_logger(nome_automacao):
+    logger = logging.getLogger(nome_automacao)
+    logger.setLevel(logging.INFO)
 
-# Contador
-ERROS_ENCONTRADOS = 0
+    formatter = logging.Formatter(
+        "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    )
 
+    log_file = f"logs/{nome_automacao}_{datetime.now().strftime('%Y%m%d')}.log"
+    file_handler = logging.FileHandler(log_file)
+    file_handler.setFormatter(formatter)
 
-def LOGGER(log_level, msg):
-    global ERROS_ENCONTRADOS
-
-    level = log_level.upper()
-    if level == "ERRO":
-        ERROS_ENCONTRADOS += 1
-        logger.error(msg)
-    elif level == "INFO":
-        logger.info(msg)
-    else:
-        logger.debug(msg)
+    logger.addHandler(file_handler)
+    return logger

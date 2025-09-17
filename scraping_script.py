@@ -1,5 +1,5 @@
 import time
-from logger import LOGGER
+from logger import setup_logger
 from utils import current_timestamp, salvar_csv
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -8,6 +8,9 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
+
+
+logger = setup_logger("scraping_script")
 
 
 def fetch_currency_from_web():
@@ -34,7 +37,7 @@ def fetch_currency_from_web():
         # Para cada cotação, acessa a URL e extrai o valor
         for cotacao_nome, url in cotacoes.items():
             try:
-                LOGGER("INFO", f"Buscando {cotacao_nome}")
+                logger.info(f"Buscando {cotacao_nome}")
                 driver.get(url)
                 # Espera 3 segundos para a página carregar
                 time.sleep(3)
@@ -48,24 +51,23 @@ def fetch_currency_from_web():
                     )
                     # Obtém o valor da cotação usando get_attribute do Selenium
                     cotacao_valor = price_tag.get_attribute("value")
-                    LOGGER("INFO", f"{cotacao_nome}: {cotacao_valor}")
+                    logger.info(f"{cotacao_nome}: {cotacao_valor}")
 
                 # Estoura uma exceção se o elemento não for encontrado
                 except TimeoutException:
-                    LOGGER("ERRO", f"Timeout ao buscar o valor para {cotacao_nome}")
+                    logger.error(f"Timeout ao buscar o valor para {cotacao_nome}")
                     continue
 
                 # Verifica se o valor foi encontrado
                 if not cotacao_valor or cotacao_valor.strip() == "":
-                    LOGGER(
-                        "INFO",
-                        f"Elemento encontrado para mas sem valor: {cotacao_nome}",
+                    logger.info(
+                        f"Elemento encontrado para mas sem valor: {cotacao_nome}"
                     )
 
                     # Pula para a próxima cotação caso não tenha valor
                     continue
 
-                LOGGER("INFO", f"Valor encontrado para {cotacao_nome}: {cotacao_valor}")
+                logger.info(f"Valor encontrado para {cotacao_nome}: {cotacao_valor}")
                 resultados.append(
                     {
                         "moeda": cotacao_nome,
@@ -76,7 +78,7 @@ def fetch_currency_from_web():
 
             # Estoura uma exceção para outros erros
             except Exception as e:
-                LOGGER("ERRO", f"Erro ao processar {cotacao_nome}: {e}")
+                logger.error(f"Erro ao processar {cotacao_nome}: {e}")
                 continue
 
         # Retorna a lista de resultados
@@ -84,7 +86,7 @@ def fetch_currency_from_web():
 
     # Estoura uma exceção geral
     except Exception as e:
-        LOGGER("ERRO", f"Erro geral: {e}")
+        logger.error(f"Erro geral: {e}")
         return resultados
 
     finally:
@@ -97,6 +99,6 @@ if __name__ == "__main__":
     if results:
         # Salva os dados em CSV e configura a saída
         salvar_csv(results, "outputs/scraping_output.csv")
-        LOGGER("INFO", f"Dados salvos com sucesso. Total: {len(results)} registros.")
+        logger.info(f"Dados salvos com sucesso. Total: {len(results)} registros.")
     else:
-        LOGGER("ERRO", "Nenhuma cotação foi encontrada.")
+        logger.error("Nenhuma cotação foi encontrada.")

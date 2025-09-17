@@ -1,6 +1,8 @@
 import requests
-from logger import LOGGER
+from logger import setup_logger
 from utils import current_timestamp, salvar_csv
+
+logger = setup_logger("api_script")
 
 
 def fetch_data_api():
@@ -43,12 +45,12 @@ def fetch_data_api():
             },
         ]
 
-        LOGGER("INFO", "Dados da API obtidos com sucesso.")
+        logger.info("Dados da API obtidos com sucesso.")
         return resultado
 
     # Estoura uma exceção para erros de conexão
     except requests.exceptions.RequestException as e:
-        LOGGER("ERRO", f"Erro ao acessar a API: {e}")
+        logger.error(f"Erro ao acessar a API: {e}")
         return []
 
 
@@ -58,4 +60,4 @@ if __name__ == "__main__":
         # Salva os dados em CSV e configura a saída
         salvar_csv(results, "outputs/api_output.csv")
     else:
-        LOGGER("ERRO", "Nenhuma cotação foi encontrada.")
+        logger.error("Nenhuma cotação foi encontrada.")
