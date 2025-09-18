@@ -11,7 +11,7 @@ def setup_logger(nome_automacao):
         "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
     )
 
-    log_file = f"logs/{nome_automacao}_{datetime.now().strftime('%Y%m%d')}.log"
+    log_file = f"C:/Users/tmarcelino/Documents/Documentos Pessoais/logs/{nome_automacao}_{datetime.now().strftime('%Y%m%d')}.log"
     file_handler = logging.FileHandler(log_file)
     file_handler.setFormatter(formatter)
 
