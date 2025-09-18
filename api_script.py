@@ -2,7 +2,7 @@ import requests
 from logger import setup_logger
 from utils import current_timestamp, salvar_csv
 
-logger = setup_logger("api_script")
+logger = setup_logger("scrapping_api")
 
 
 def fetch_data_api():
@@ -59,5 +59,6 @@ if __name__ == "__main__":
     if results:
         # Salva os dados em CSV e configura a saída
         salvar_csv(results, "outputs/api_output.csv")
+        logger.info("Dados salvos em outputs/api_output.csv")
     else:
         logger.error("Nenhuma cotação foi encontrada.")
